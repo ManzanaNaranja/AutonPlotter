@@ -8,9 +8,12 @@ PrintWriter out;
 boolean lastActionWasMove = false;
 APoint mousePoint;
 boolean spaceDown = false;
+boolean rDown = false;
 
 float startAngle = 0; // 0 rad is facing to the right, rotations are counter clockwise (radians)
 int InchesPerTile = 18;
+
+
 
 
 void setup() {
@@ -21,6 +24,7 @@ void setup() {
   p = new ArrayList<APoint>();
   
   out = createWriter("output.txt");
+  addPointToPath(250,550); // inital start point of robot
 
 }
 // FIRST ACTION MUST BE A MOVE ACTION OR CODE BREAKS
@@ -148,18 +152,25 @@ void drawPoints() {
 }
 
 void mousePressed() {
-  p.add(new APoint(mousePoint.x, mousePoint.y));
+  addPointToPath(mousePoint.x, mousePoint.y);  
+}
+
+void addPointToPath(int x, int y) {
+  p.add(new APoint(x,y));
   if(p.size() > 1) {
     APoint coord = screenToWorld(new APoint(mousePoint.x, mousePoint.y));
-    actionlist.add(new AMove(coord, true, 127));
+    actionlist.add(new AMove(coord, !rDown, 127));
+  } else {
+    print("start point on screen: x: " + x +  " y: " + y);
   }
-  
-
 }
 
 void keyReleased() {
   if(key == 32) {
     spaceDown = false;
+  }
+  if(key == 114) {
+    rDown = false;
   }
 }
 
@@ -167,6 +178,9 @@ void keyPressed() {
   if(key == 32) { // space
     spaceDown = true;
   } 
+  if(key == 114) {
+    rDown = true;
+  }
   if(key == 122) { // z
     if(actionlist.size() != 0) {
       if(actionlist.get(actionlist.size()-1).id == 0) {
@@ -203,9 +217,9 @@ void keyPressed() {
         if(!lastActionWasMove) {
           lastActionWasMove = true;
           out.print("chassis.pid_odom_smooth_pp_set({");
-          out.print("{{" + m.pos.x + ", " + m.pos.y + "}, fwd, 127}"); // add other parts of command instead of string
+          out.print("{{" + m.pos.x + ", " + m.pos.y + "}, " + ((m.fwd) ? "fwd" : "rev") + ", 127}"); // add other parts of command instead of string
         } else {
-          out.print(",{{" + m.pos.x + ", " + m.pos.y + "}, fwd, 127}");
+          out.print(",{{" + m.pos.x + ", " + m.pos.y + "}, " + ((m.fwd) ? "fwd" : "rev") + ", 127}");
         }
         if(lastAction) {
           out.println("});");
