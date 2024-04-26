@@ -73,9 +73,9 @@ void drawBars() {
   pop();
 }
 
-void drawBlueGoal() {
+void drawRedGoal() {
   push();
-  stroke(15,123,240);
+  stroke(240,15,123);
   strokeWeight(8);
   lineC(0,2,1,2);
   lineC(0,4,1,4);
@@ -83,9 +83,9 @@ void drawBlueGoal() {
   pop();
 }
 
-void drawRedGoal() {
+void drawBlueGoal() {
   push();
-  stroke(240,15,123);
+  stroke(15,123,240);
   strokeWeight(8);
   lineC(5,2,6,2);
   lineC(5,4,6,4);
@@ -99,11 +99,11 @@ void lineC(int a, int b, int c, int d) {
 
 void drawCorners() {
   push();
-  stroke(240,15,123);
+  stroke(15,123,240);
   strokeWeight(8);
   lineC(0,1,1,0);
   lineC(0,5,1,6);
-  stroke(15,123,240);
+  stroke(240,15,123);
   lineC(5,6,6,5);
   lineC(5,0,6,1);
 
@@ -204,18 +204,7 @@ void keyPressed() {
         }
       }
     }
-    //out.print("chassis.pid_odom_smooth_pp_set({");
-  
-  
-    //for(int i = 1; i < p.size(); i++) {
-    //  APoint curr = p.get(i);
-    //  APoint worldCoord = screenToWorld(curr);
-    //  out.print("{{" + worldCoord.x + ", " + worldCoord.y + "}, fwd, 110}");
-    //  if(i != p.size()-1) {
-    //    out.print(",");
-    //  }
-    //}
-    //out.println("});");
+    out.println("// end of code segment");
     out.flush();
   }
 }
