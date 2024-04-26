@@ -7,7 +7,7 @@ boolean undo = false;
 PrintWriter out;
 boolean lastActionWasMove = false;
 
-int startAngle = 0; // 0 deg is facing to the right, rotations are counter clockwise
+float startAngle = 0; // 0 rad is facing to the right, rotations are counter clockwise (radians)
 void setup() {
   size(800,800);
   background(255);
@@ -34,7 +34,21 @@ void draw() {
   drawRedGoal();
   drawCorners();
   
+  drawHover();
   drawPoints();
+}
+
+void drawHover() {
+  push();
+  noStroke();
+  fill(253, 215, 150);
+  int x = mouseX - startX;
+  int y = mouseY - startY;
+  if(x > 0 && x < tileSize * 6 && y > 0 && y < tileSize * 6) {
+      circle(mouseX-startX, mouseY-startY, 10);
+  }
+
+  pop();
 }
 
 void drawTiles() {
@@ -115,6 +129,8 @@ void mousePressed() {
 
 }
 
+
+
 void keyPressed() { 
   if(key == 122) { // z
     if(actionlist.size() != 0) {
@@ -124,6 +140,12 @@ void keyPressed() {
       actionlist.remove(actionlist.size()-1);
     }
 
+  }
+  if(key == 119) { // w
+    actionlist.add(new Wings(0));  
+  }
+  if(key == 120) { // x
+  actionlist.add(new Wings(1));
   }
   if(key == 105) { // i
    actionlist.add(new Intake(1));
@@ -146,9 +168,9 @@ void keyPressed() {
         if(!lastActionWasMove) {
           lastActionWasMove = true;
           out.print("chassis.pid_odom_smooth_pp_set({");
-          out.print("{{" + m.pos.x + ", " + m.pos.y + "}, fwd, 110}"); // add other parts of command instead of string
+          out.print("{{" + m.pos.x + ", " + m.pos.y + "}, fwd, 127}"); // add other parts of command instead of string
         } else {
-          out.print(",{{" + m.pos.x + ", " + m.pos.y + "}, fwd, 110}");
+          out.print(",{{" + m.pos.x + ", " + m.pos.y + "}, fwd, 127}");
         }
         if(lastAction) {
           out.println("});");
@@ -165,6 +187,18 @@ void keyPressed() {
           out.println("intakeOff();");
         } else if(intake.mode == 1) {
           out.println("intakeOn();");
+        }
+      } else if(curr.id == 2) {
+        Wings wings = (Wings) curr;
+        if(lastActionWasMove) {
+          lastActionWasMove = false;
+          out.println("});");
+        }
+        if(wings.mode == 0) {
+           out.println("wingsOn();");
+        }
+        if(wings.mode == 1) {
+          out.println("wingsOff();");
         }
       }
     }
@@ -190,8 +224,8 @@ APoint screenToWorld(APoint pt) {
   float yd = pt.y - ref.y;
   float tx = xd*cos(startAngle) - yd*sin(startAngle);
   float ty = xd * sin(startAngle) + yd * cos(startAngle);
-  int newx = (int)(tx/tileSize * 36);
-  int newy = (int)(ty/tileSize * 36);
+  int newx = (int)(tx/tileSize * 18);
+  int newy = (int)(ty/tileSize * 18);
   
   
   return new APoint(newy,newx); // y and x are switched because screen coord system is different than robot coord system

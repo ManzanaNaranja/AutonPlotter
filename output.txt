@@ -1,3 +1,0 @@
-chassis.pid_odom_smooth_pp_set({{{1, 12}, fwd, 110},{{1, 22}, fwd, 110}});
-chassis.pid_odom_smooth_pp_set({{{1, 12}, fwd, 110},{{1, 22}, fwd, 110},{{11, 23}, fwd, 110},{{21, 22}, fwd, 110}});
-chassis.pid_odom_smooth_pp_set({{{29, -2}, fwd, 110}});
