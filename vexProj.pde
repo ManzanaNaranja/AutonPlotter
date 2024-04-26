@@ -6,9 +6,12 @@ ArrayList<APoint> p;
 boolean undo = false;
 PrintWriter out;
 boolean lastActionWasMove = false;
+APoint mousePoint;
+boolean spaceDown = false;
 
 float startAngle = 0; // 0 rad is facing to the right, rotations are counter clockwise (radians)
 int InchesPerTile = 18;
+
 
 void setup() {
   size(800,800);
@@ -30,6 +33,8 @@ void draw() {
   }
   translate(startX, startY);
   rect(0,0,tileSize * 6,tileSize * 6);
+  updateMousePoint();
+  
   drawTiles();
   drawBars();
   drawBlueGoal();
@@ -40,14 +45,35 @@ void draw() {
   drawPoints();
 }
 
+void updateMousePoint() {
+  if(spaceDown && p.size() > 0) {
+    APoint lastPt = p.get(p.size()-1);
+    int x = mouseX - startX;
+    int y = mouseY - startY;
+    
+    int xDist = abs(lastPt.x - x);
+    int yDist = abs(lastPt.y - y);
+    if(xDist > yDist) {
+      mousePoint = new APoint(x, lastPt.y);
+    } else {
+      mousePoint = new APoint(lastPt.x, y);
+    }
+    
+    
+  } else {
+    mousePoint = new APoint(mouseX - startX, mouseY - startY);
+  }
+  
+}
+
 void drawHover() {
   push();
   noStroke();
   fill(253, 215, 150);
-  int x = mouseX - startX;
-  int y = mouseY - startY;
+  int x = mousePoint.x;
+  int y = mousePoint.y;
   if(x > 0 && x < tileSize * 6 && y > 0 && y < tileSize * 6) {
-      circle(mouseX-startX, mouseY-startY, 10);
+      circle(x,y, 10);
   }
 
   pop();
@@ -122,18 +148,25 @@ void drawPoints() {
 }
 
 void mousePressed() {
-  p.add(new APoint(mouseX - startX, mouseY - startY));
+  p.add(new APoint(mousePoint.x, mousePoint.y));
   if(p.size() > 1) {
-    APoint coord = screenToWorld(new APoint(mouseX - startX, mouseY - startY));
+    APoint coord = screenToWorld(new APoint(mousePoint.x, mousePoint.y));
     actionlist.add(new AMove(coord, true, 127));
   }
   
 
 }
 
-
+void keyReleased() {
+  if(key == 32) {
+    spaceDown = false;
+  }
+}
 
 void keyPressed() { 
+  if(key == 32) { // space
+    spaceDown = true;
+  } 
   if(key == 122) { // z
     if(actionlist.size() != 0) {
       if(actionlist.get(actionlist.size()-1).id == 0) {
