@@ -47,6 +47,15 @@ void draw() {
   
   drawHover();
   drawPoints();
+  
+   ArrayList<APoint> view = new ArrayList<APoint>();
+   view.add(worldToScreen(new APoint(-26,24)));
+   view.add(worldToScreen(new APoint(-38,12)));
+   for(int i = 0; i < view.size(); i++) {
+     circle(view.get(i).x,view.get(i).y,10.0f);
+   }
+    
+  
 }
 
 void updateMousePoint() {
@@ -302,5 +311,16 @@ APoint screenToWorld(APoint pt) {
   
   
   return new APoint(newy,newx); // y and x are switched because screen coord system is different than robot coord system
+  
+}
+
+APoint worldToScreen(APoint pt) {
+  //float tx = xd*cos(startAngle) - yd*sin(startAngle);
+  //float ty = xd * sin(startAngle) + yd * cos(startAngle);
+  int newx =  p.get(0).x + (int)(pt.y * tileSize / InchesPerTile);
+  int newy = p.get(0).y + (int)(pt.x * tileSize / InchesPerTile);
+  
+  
+  return new APoint(newx,newy); // y and x are switched because screen coord system is different than robot coord system
   
 }
