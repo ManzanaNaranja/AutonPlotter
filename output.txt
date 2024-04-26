@@ -1,2 +1,44 @@
-chassis.pid_odom_smooth_pp_set({{{-17, 33}, fwd, 127},{{-30, 22}, rev, 127},{{-59, 17}, fwd, 127},{{-48, 27}, rev, 127},{{-36, 9}, fwd, 127},{{-29, -15}, rev, 127},{{-48, -16}, fwd, 127},{{-63, -17}, rev, 127}});
+rightWingOn();
+intakeOn();
+chassis.pid_odom_smooth_pp_set({{{0, 18}, fwd, 127},{{0, 32}, fwd, 127},{{-2, 38}, fwd, 127},{{-6, 43}, fwd, 127}});
+chassis.pid_wait();
+intakeRev();
+chassis.pid_odom_smooth_pp_set({{{-10, 45}, fwd, 127},{{-12, 43}, fwd, 127},{{-14, 37}, fwd, 127}});
+chassis.pid_wait();
+wingsOff();
+chassis.pid_odom_smooth_pp_set({{{-23, 27}, fwd, 127}});
+chassis.pid_wait();
+intakeOn();
+chassis.pid_odom_smooth_pp_set({{{-38, 12}, fwd, 127},{{-36, 14}, rev, 127},{{-43, 14}, fwd, 127}});
+chassis.pid_wait();
+wingsOn();
+chassis.pid_odom_smooth_pp_set({{{-43, 20}, fwd, 127}});
+chassis.pid_wait();
+intakeOff();
+chassis.pid_odom_smooth_pp_set({{{-43, 45}, fwd, 127}});
+chassis.pid_wait();
+// end of code segment
+chassis.pid_odom_smooth_pp_set({{{1, 40}, fwd, 127},{{0, 44}, fwd, 127},{{-8, 46}, fwd, 127},{{-9, 43}, fwd, 127},{{-14, 37}, fwd, 127},{{-38, 12}, fwd, 127},{{-23, 27}, rev, 127},{{-31, 19}, fwd, 127},{{-35, 19}, fwd, 127},{{-40, 19}, fwd, 127}});
+chassis.pid_wait();
+// end of code segment
+rightWingOn();
+intakeOn();
+chassis.pid_odom_smooth_pp_set({{{0, 17}, fwd, 127},{{0, 37}, fwd, 127},{{-2, 41}, fwd, 127},{{-5, 44}, fwd, 127}});
+chassis.pid_wait();
+intakeRev();
+chassis.pid_odom_smooth_pp_set({{{-8, 45}, fwd, 127},{{-10, 43}, fwd, 127}});
+chassis.pid_wait();
+wingsOff();
+intakeOn();
+chassis.pid_odom_smooth_pp_set({{{-23, 27}, fwd, 127},{{-38, 11}, fwd, 127}});
+chassis.pid_wait();
+// add stuff here
+chassis.pid_odom_smooth_pp_set({{{-32, 17}, rev, 127},{{-36, 14}, fwd, 127},{{-43, 14}, fwd, 127}});
+chassis.pid_wait();
+wingsOn();
+chassis.pid_odom_smooth_pp_set({{{-43, 18}, fwd, 127}});
+chassis.pid_wait();
+intakeOff();
+chassis.pid_odom_smooth_pp_set({{{-43, 45}, fwd, 127}});
+chassis.pid_wait();
 // end of code segment

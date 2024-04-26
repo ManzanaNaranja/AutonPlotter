@@ -24,7 +24,7 @@ void setup() {
   p = new ArrayList<APoint>();
   
   out = createWriter("output.txt");
-  addPointToPath(250,550); // inital start point of robot
+  addPointToPath(250,530); // inital start point of robot
 
 }
 // FIRST ACTION MUST BE A MOVE ACTION OR CODE BREAKS
@@ -178,7 +178,7 @@ void keyPressed() {
   if(key == 32) { // space
     spaceDown = true;
   } 
-  if(key == 114) {
+  if(key == 114) { // r
     rDown = true;
   }
   if(key == 122) { // z
@@ -190,18 +190,34 @@ void keyPressed() {
     }
 
   }
+  if(key == 99) { // c
+    actionlist.add(new Comment("// add stuff here"));
+  }
+  if(key == 113) { // q (left wing)
+    actionlist.add(new Wings(3));
+  }
+  if(key == 101) { // e (right wing)
+    actionlist.add(new Wings(2));
+  }
+  
   if(key == 119) { // w
     actionlist.add(new Wings(0));  
   }
-  if(key == 120) { // x
+  if(key == 120) { // x (wings off)
   actionlist.add(new Wings(1));
   }
-  if(key == 105) { // i
+  if(key == 105) { // i (intake)
    actionlist.add(new Intake(1));
   }
-  if(key == 111) { // o
+  if(key == 111) { // o (set 0 volts)
    actionlist.add(new Intake(0));
   }
+  
+  if(key == 117) { // u (outtake)
+    actionlist.add(new Intake(2));
+  }
+  
+  
   if(key == 27) { // esc
     out.flush();
     out.close();
@@ -210,7 +226,7 @@ void keyPressed() {
   if(key == 112) { // p
   
     for(int i = 0; i < actionlist.size(); i++) {
-      boolean lastAction = i == actionlist.size()-1;
+      boolean lastAction = (i == actionlist.size()-1);
       Action curr = actionlist.get(i);
       if(curr.id == 0) {
         AMove m = (AMove) curr;
@@ -223,6 +239,7 @@ void keyPressed() {
         }
         if(lastAction) {
           out.println("});");
+          out.println("chassis.pid_wait();");
           lastActionWasMove = false;
         }
         
@@ -231,17 +248,21 @@ void keyPressed() {
         if(lastActionWasMove) {
           lastActionWasMove = false;
           out.println("});");
+          out.println("chassis.pid_wait();");
         }
         if(intake.mode == 0) {
           out.println("intakeOff();");
         } else if(intake.mode == 1) {
           out.println("intakeOn();");
+        } else if(intake.mode == 2) {
+          out.println("intakeRev();");
         }
       } else if(curr.id == 2) {
         Wings wings = (Wings) curr;
         if(lastActionWasMove) {
           lastActionWasMove = false;
           out.println("});");
+          out.println("chassis.pid_wait();");
         }
         if(wings.mode == 0) {
            out.println("wingsOn();");
@@ -249,6 +270,20 @@ void keyPressed() {
         if(wings.mode == 1) {
           out.println("wingsOff();");
         }
+        if(wings.mode == 2) {
+          out.println("rightWingOn();");
+        }
+        if(wings.mode == 3) {
+          out.println("leftWingOn();");
+        }
+      } else if(curr.id == 3) {
+        if(lastActionWasMove) {
+          lastActionWasMove = false;
+          out.println("});");
+          out.println("chassis.pid_wait();");
+        }
+        Comment comment = (Comment) curr;
+        out.println(comment.txt);
       }
     }
     out.println("// end of code segment");
