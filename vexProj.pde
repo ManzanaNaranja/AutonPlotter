@@ -8,6 +8,8 @@ PrintWriter out;
 boolean lastActionWasMove = false;
 
 float startAngle = 0; // 0 rad is facing to the right, rotations are counter clockwise (radians)
+int InchesPerTile = 18;
+
 void setup() {
   size(800,800);
   background(255);
@@ -224,8 +226,8 @@ APoint screenToWorld(APoint pt) {
   float yd = pt.y - ref.y;
   float tx = xd*cos(startAngle) - yd*sin(startAngle);
   float ty = xd * sin(startAngle) + yd * cos(startAngle);
-  int newx = (int)(tx/tileSize * 18);
-  int newy = (int)(ty/tileSize * 18);
+  int newx = (int)(tx/tileSize * InchesPerTile);
+  int newy = (int)(ty/tileSize * InchesPerTile);
   
   
   return new APoint(newy,newx); // y and x are switched because screen coord system is different than robot coord system
